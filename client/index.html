@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>PokeHunt</title>
+    <!--You can change the content of this tag to your own CLIENT ID-->
+    <meta name="google-signin-client_id" content="765823028566-ml9p0ls6ij7l8c8korsf066rmqsobqtu.apps.googleusercontent.com">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="./main.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <a class="navbar-brand" href="#">PokeHunt</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id="signout-button"><a class="dropdown-toggle" data-toggle="dropdown" href="#" id="user-name"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="user-email"></a></li>
+                        <li><a href="#" onclick="signOut();">Sign out</a></li>
+                    </ul>
+                </li>
+            <li><a href="#" id="g-signin-button" class="g-signin2" data-onsuccess="onSignIn"></span></a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="container">
+      <div id="show">
+        <input type="text" name="search" onchange="searchPokemon(this.value)" placeholder="Search pokemon">
+        <div id="pokeInfo"></div>
+        <div id="map"></div>
+        <div id="youtube"></div>
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy84GBPHqzA2zgKDRBwZ-Myve3lfoGzhA&callback=initMap"
+            type="text/javascript"></script>
+      </div>
+    </div>
+    
+    <script>
+        function onSignIn(googleUser) {
+            const id_token = googleUser.getAuthResponse().id_token;
+            googleUser.disconnect()
+            axios
+            .post('http://localhost:3000/tokensignin', { idtoken: id_token })
+            .then(function({ data }) {
+                // IMPORTANT! Saves the accessToken from server
+                localStorage.setItem('accessToken', data.accessToken);
+                document.getElementById('g-signin-button').style.display = 'none';
+                document.getElementById('signout-button').style.display = 'block';
+                document.getElementById('show').style.display = 'block';
+                document.getElementById('user-name').innerHTML = `<p>${data.name}</p>`;
+                document.getElementById('user-email').innerHTML = `<p>${data.email}</p>`;
+          })
+          .catch(function(err) {
+            console.error(err);
+          });
+      }
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2
+          .signOut()
+          .then(function () {
+            localStorage.removeItem('accessToken');
+            document.getElementById('g-signin-button').style.display = 'block';
+            document.getElementById('signout-button').style.display = 'none';
+            document.getElementById('show').style.display = 'none';
+          })
+          .catch(function(err) {
+            console.error(err);
+          });
+      }
+    </script>
+  </body>
+</html>
