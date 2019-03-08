@@ -8,6 +8,7 @@
     <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="./index.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <style>
         /* Always set the map height explicitly to define the size of the div
            * element that contains the map. */
@@ -35,11 +36,14 @@
 <body>
 
     <input type="text" onchange="searchPokemon(this.value)" placeholder="search pokemon">
+
     <div id="pokeInfo"></div>
     <div id="map"></div>
+
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy84GBPHqzA2zgKDRBwZ-Myve3lfoGzhA&callback=initMap"
         type="text/javascript"></script>
+
 </body>
 
 </html>

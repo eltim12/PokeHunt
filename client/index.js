@@ -6,10 +6,43 @@ $(document).ready(function () {
     })
         .done(res => {
             let output = ''
+
+            let allAbilities = ''
+
+            for (let i = 0; i < res.abilities.length; i++) {
+                if (i === res.abilities.length - 1) {
+                    allAbilities += `${res.abilities[i].ability.name}`
+                } else {
+                    allAbilities += `${res.abilities[i].ability.name}, `
+                }
+            }
+
+            let name = ''
+            name += res.name[0].toUpperCase()
+            name += res.name.slice(1, res.name.length)
+
+            // console.log(res.abilities[0].ability.name)
+
             output += `
-                <h2>${res.name}</h2>
-                <img src="${res.sprites.front_default}" width="200px" height="200px">
-                `
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="${res.sprites.front_default}" alt="pokemon" style="width:200px;height:200px;">
+                        <h1 style="border:1px white solid;">${name}</h1>
+                    </div>
+                <div class="flip-card-back">
+                <h1>${name}</h1>
+                    <p>Type: ${res.types[0].type.name}
+                    <p>Abilities: ${allAbilities} </p>
+                    <p>Height: ${res.height}"</p>
+                    <p>Weight: ${res.weight} lbs</p>
+                    <p>Base EXP:</p>
+                        <div class="container" style="width:100%; background-color:#ddd">
+                            <div class="skills css" style="width: ${(res.base_experience / 400) * 100}%; background-color: #2196F3;">${res.base_experience}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
             $('#pokeInfo').append(output)
         })
         .fail(err => {
@@ -30,11 +63,42 @@ function searchPokemon(search) {
             method: 'GET'
         })
             .done(res => {
+
+                let allAbilities = ''
+
+                for (let i = 0; i < res.abilities.length; i++) {
+                    if (i === res.abilities.length - 1) {
+                        allAbilities += `${res.abilities[i].ability.name}`
+                    } else {
+                        allAbilities += `${res.abilities[i].ability.name}, `
+                    }
+                }
+
+                let name = ''
+                name += res.name[0].toUpperCase()
+                name += res.name.slice(1, res.name.length)
+
                 let output = ''
                 output += `
-                <h2>${res.name}</h2>
-                <img src="${res.sprites.front_default}">
-                `
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="${res.sprites.front_default}" alt="pokemon" style="width:200px;height:200px;">
+                            <h1 style="border:1px white solid;">${name}</h1>
+                        </div>
+                    <div class="flip-card-back">
+                    <h1>${name}</h1>
+                        <p>Type: ${res.types[0].type.name}
+                        <p>Abilities: ${allAbilities} </p>
+                        <p>Height: ${res.height}"</p>
+                        <p>Weight: ${res.weight} lbs</p>
+                        <p>Base EXP:</p>
+                            <div class="container" style="width:100%; background-color:#ddd">
+                                <div class="skills css" style="width: ${(res.base_experience / 400) * 100}%; background-color: #2196F3;">${res.base_experience}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
                 // console.log(res.name)
                 $('#pokeInfo').empty()
                 $('#pokeInfo').append(output)
